@@ -6,6 +6,10 @@ pipeline {
         SONAR_URL = 'http://192.168.1.62:9000/'
     }
 
+    tools {
+        maven 'Maven'
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
