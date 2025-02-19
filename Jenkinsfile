@@ -3,6 +3,7 @@ pipeline {
 
     environment {
         TOMCAT_URL = 'http://192.168.1.62:8081/'
+        SONAR_URL = 'http://192.168.1.62:9000/'
     }
 
     stages {
@@ -19,6 +20,7 @@ pipeline {
                         mvn clean verify sonar:sonar \
                         -Dsonar.projectKey=pipeline \
                         -Dsonar.projectName=pipeline \
+                        -Dsonar.host.url=${SONAR_URL} \
                         -Dsonar.login=${env.SONAR_AUTH_TOKEN}
                     """
                 }
