@@ -59,17 +59,22 @@ pipeline {
         always {
             script {
                 def timestamp = sh(script: "date +'%Y-%m-%d_%H-%M-%S'", returnStdout: true).trim()
-                def reportName = "build_report_${env.JOB_NAME}_${env.BUILD_NUMBER}_${timestamp}.pdf"
+                def reportName = "build_report_${env.JOB_NAME}_${env.BUILD_NUMBER}_${timestamp}.txt"
 
-                sh "cat ${env.WORKSPACE}/console.log > build_report.txt || echo 'No console log found' > build_report.txt"
+                sh """
+                    echo '===== Build Report =====' > ${reportName}
+                    echo 'Job Name: ${env.JOB_NAME}' >> ${reportName}
+                    echo 'Build Number: ${env.BUILD_NUMBER}' >> ${reportName}
+                    echo 'Build ID: ${env.BUILD_ID}' >> ${reportName}
+                    echo 'Timestamp: ${timestamp}' >> ${reportName}
+                    echo 'Build Status: ${currentBuild.currentResult}' >> ${reportName}
+                    echo '========================' >> ${reportName}
+                """
 
-                sh "mvn site -DgenerateReports=false || echo 'Maven site generation failed'"
-
-                sh "pandoc build_report.txt -o ${reportName} || echo 'PDF conversion failed'"
+                sh "jenkins-cli console ${env.JOB_NAME} ${env.BUILD_NUMBER} >> ${reportName} || echo 'Failed to fetch logs' >> ${reportName}"
 
                 archiveArtifacts artifacts: "${reportName}", allowEmptyArchive: true
-
-                env.REPORT_FILE = reportName
+                env.REPORT_FILE = reportName // Store the filename for email
             }
         }
 
@@ -77,6 +82,7 @@ pipeline {
             script {
                 emailext(
                     to: 'vinzyzk@gmail.com',
+                    from: 'Jenkins Build Server <pipelinesmtp@gmail.com>',
                     subject: "✅ Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """
                         <p>The build was successful.</p>
@@ -99,6 +105,7 @@ pipeline {
             script {
                 emailext(
                     to: 'vinzyzk@gmail.com',
+                    from: 'Jenkins Build Server <pipelinesmtp@gmail.com>',
                     subject: "❌ Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """
                         <p>The build has failed.</p>
