@@ -21,11 +21,6 @@ pipeline {
             steps {
                 sh "mvn clean verify"
             }
-            post {
-                always {
-                    junit '**/target/surefire-reports/*.xml'
-                }
-            }
         }
 
         stage('Sonar Analysis') {
