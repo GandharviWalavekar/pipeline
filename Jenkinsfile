@@ -79,7 +79,7 @@ pipeline {
                     to: 'vinzyzk@gmail.com',
                     subject: "✅ Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """
-                        <p>The build was successful!</p>
+                        <p>The build was successful.</p>
                         <ul>
                             <li><b>Job Name:</b> ${env.JOB_NAME}</li>
                             <li><b>Build Number:</b> ${env.BUILD_NUMBER}</li>
