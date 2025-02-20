@@ -56,28 +56,6 @@ pipeline {
     }
 
     post {
-        always {
-            script {
-                def timestamp = sh(script: "date +'%Y-%m-%d_%H-%M-%S'", returnStdout: true).trim()
-                def reportName = "build_report_${env.JOB_NAME}_${env.BUILD_NUMBER}_${timestamp}.txt"
-
-                sh """
-                    echo '===== Build Report =====' > ${reportName}
-                    echo 'Job Name: ${env.JOB_NAME}' >> ${reportName}
-                    echo 'Build Number: ${env.BUILD_NUMBER}' >> ${reportName}
-                    echo 'Build ID: ${env.BUILD_ID}' >> ${reportName}
-                    echo 'Timestamp: ${timestamp}' >> ${reportName}
-                    echo 'Build Status: ${currentBuild.currentResult}' >> ${reportName}
-                    echo '========================' >> ${reportName}
-                """
-
-                sh "jenkins-cli console ${env.JOB_NAME} ${env.BUILD_NUMBER} >> ${reportName} || echo 'Failed to fetch logs' >> ${reportName}"
-
-                archiveArtifacts artifacts: "${reportName}", allowEmptyArchive: true
-                env.REPORT_FILE = reportName // Store the filename for email
-            }
-        }
-
         success {
             script {
                 emailext(
@@ -90,13 +68,10 @@ pipeline {
                             <li><b>Job Name:</b> ${env.JOB_NAME}</li>
                             <li><b>Build Number:</b> ${env.BUILD_NUMBER}</li>
                             <li><b>Build ID:</b> ${env.BUILD_ID}</li>
-                            <li><b>Timestamp:</b> ${timestamp}</li>
                             <li><b>Build Status:</b> ✅ SUCCESS</li>
                         </ul>
-                        <p>Find the attached build report and logs.</p>
                     """,
-                    mimeType: 'text/html',
-                    attachmentsPattern: "${env.REPORT_FILE}"
+                    mimeType: 'text/html'
                 )
             }
         }
@@ -113,13 +88,11 @@ pipeline {
                             <li><b>Job Name:</b> ${env.JOB_NAME}</li>
                             <li><b>Build Number:</b> ${env.BUILD_NUMBER}</li>
                             <li><b>Build ID:</b> ${env.BUILD_ID}</li>
-                            <li><b>Timestamp:</b> ${timestamp}</li>
                             <li><b>Build Status:</b> ❌ FAILURE</li>
                         </ul>
-                        <p>Please check the attached build report and logs for more details.</p>
+                        <p>Please check the Jenkins logs for more details.</p>
                     """,
-                    mimeType: 'text/html',
-                    attachmentsPattern: "${env.REPORT_FILE}"
+                    mimeType: 'text/html'
                 )
             }
         }
