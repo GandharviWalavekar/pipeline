@@ -1,5 +1,5 @@
 <html>
 <body>
-<h2><%= "beep boop tlad" %></h2>
+<h2><%= "beep boop vinz gw" %></h2>
 </body>
 </html>
