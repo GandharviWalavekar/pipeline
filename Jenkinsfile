@@ -83,7 +83,7 @@ pipeline {
                     from: 'Jenkins Build Server <pipelinesmtp@gmail.com>',
                     subject: "❌ Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                     body: """
-                        <p>The build has failed again.</p>
+                        <p>The build has failed again pro.</p>
                         <ul>
                             <li><b>Job Name:</b> ${env.JOB_NAME}</li>
                             <li><b>Build Number:</b> ${env.BUILD_NUMBER}</li>
