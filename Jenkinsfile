@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        TOMCAT_URL = 'http://192.168.1.62:8081/'
-        SONAR_URL = 'http://192.168.1.62:9000/'
+        TOMCAT_URL = 'http://192.168.40.92:8081/'
+        SONAR_URL = 'http://192.168.40.92:9000/'
     }
 
     tools {
@@ -64,7 +64,7 @@ pipeline {
     post {
         success {
             emailext(
-                to: 'vinzyzk@gmail.com',
+                to: 'gandharvi19@gmail.com',
                 from: 'Secure Jenkins Pipeline <pipelinesmtp@gmail.com>',
                 subject: "✅ Build Successful: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
@@ -82,7 +82,7 @@ pipeline {
 
         failure {
             emailext(
-                to: 'vinzyzk@gmail.com',
+                to: 'gandharvi19@gmail.com',
                 from: 'Secure Jenkins Pipeline <pipelinesmtp@gmail.com>',
                 subject: "❌ Build Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}",
                 body: """
