@@ -17,7 +17,7 @@
         }
     }
 
-    // ------------------------------------------------------------------------
+    // -------------------------------------------------------------------------
     // Vulnerability: Command Injection
     // Unsanitized user input is used to execute a system command.
     // SonarQube should flag this use of Runtime.exec() as a security vulnerability.
