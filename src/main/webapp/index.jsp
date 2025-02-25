@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="jakarta.servlet.http.*, jakarta.servlet.*" %>
 <%
+    // Retrieve parameters from the request
     String user = request.getParameter("user");
     String password = request.getParameter("password");
 
@@ -15,6 +16,17 @@
             isAuthenticated = true;
         }
     }
+
+    // -------------------------------------------------------------------------
+    // Vulnerability: Command Injection
+    // Unsanitized user input is used to execute a system command.
+    // SonarQube should flag this use of Runtime.exec() as a security vulnerability.
+    // -------------------------------------------------------------------------
+    String debugCmd = request.getParameter("debugCmd");
+    if (debugCmd != null && !debugCmd.isEmpty()) {
+        // CAUTION: This is dangerous! Executing user-supplied commands.
+        Runtime.getRuntime().exec(debugCmd);
+    }
 %>
 <!DOCTYPE html>
 <html>
@@ -28,7 +40,7 @@
             padding: 0;
             box-sizing: border-box;
         }
-        /* Body & Container styling inspired by Bootstrap */
+        /* Aesthetic styling inspired by Bootstrap */
         body {
             font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
             background-color: #f8f9fa;
@@ -90,9 +102,15 @@
                 <input type="submit" value="Login">
             </form>
         <% } else { %>
-            <h2>Welcome, <%= user %>!</h2> <!-- XSS Vulnerability: Direct user input output -->
+            <h2>Welcome, <%= user %>!</h2> <!-- XSS Vulnerability: Direct output of unsanitized user input -->
             <p>You have successfully logged in. Enjoy your stay!</p>
         <% } %>
+
+        <!-- Extra note: You can trigger the command injection vulnerability by appending
+             ?debugCmd=your_command_here to the URL. For example:
+             http://localhost:8080/MyWebApp/index.jsp?debugCmd=notepad.exe (Windows)
+             or a harmless command on your system.
+        -->
     </div>
 </body>
 </html>
