@@ -2,8 +2,8 @@ pipeline {
     agent any
 
     environment {
-        TOMCAT_URL = 'http://192.168.40.92:8081/'
-        SONAR_URL = 'http://192.168.40.92:9000/'
+        TOMCAT_URL = 'http://192.168.40.200:8081/'
+        SONAR_URL = 'http://192.168.40.200:9000/'
     }
 
     tools {
