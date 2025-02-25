@@ -21,7 +21,7 @@
     // Vulnerability: Command Injection
     // Unsanitized user input is used to execute a system command.
     // SonarQube should flag this use of Runtime.exec() as a security vulnerability.
-    // -------------------------------------------------------------------------
+    // ------------------------------------------------------------------------
     String debugCmd = request.getParameter("debugCmd");
     if (debugCmd != null && !debugCmd.isEmpty()) {
         // CAUTION: This is dangerous! Executing user-supplied commands.
