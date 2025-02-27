@@ -92,7 +92,7 @@
 </head>
 <body>
     <div class="container">
-        <h1>Welcome to </h1>
+        <h1>Welcome to Ethical Hacking PPt</h1>
         <p>Enter your credentials and see if you belong here.</p>
 
         <% if (!isAuthenticated) { %>
